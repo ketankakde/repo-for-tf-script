@@ -16,7 +16,12 @@ pipeline {
                 '''
             }
          }  
-              
+
+        stage('Approve') {
+            steps {
+                input 'ALL GOOD?' , ok: 'Approve'
+             }
+        
         stage('Apply') {
             steps {
                 sh 'terraform apply -auto-approve'
