@@ -19,7 +19,7 @@ pipeline {
 
         stage('Approve') {
             steps {
-                input 'ALL GOOD?' , ok: 'Approve'
+                input message: 'ALL GOOD?' , ok: 'Approve'
              }
          }
         stage('Apply') {
