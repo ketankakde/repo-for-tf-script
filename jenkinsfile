@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ketankakde/repo-for-tf-script.git'
+            }
+        }
+
+        stage('Plan') {
+            steps {
+                sh '''
+                terraform init
+                terraform plan
+                '''
+            }
+         }  
+              
+        stage('Apply') {
+            steps {
+                sh 'terraform apply -auto-approve'
+                    }
+            }  
+        stage('Deploy') {
+            steps {
+                    echo "Deploy Success!!!"
+                  }
+        }
+    }
+}
