@@ -1,7 +1,14 @@
 provider "aws" {
    region = "us-east-1"
 }  
-    
+   
+terraform {
+   backend = "s3" {
+      bucket = "3-tier-bket"
+      key = "terraform.tfstate"
+      region = "us-east-1"
+   }
+}
 
 resource "aws_iam_role" "eks_cluster_role" {
   name = "eks_cluster_role"
