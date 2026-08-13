@@ -149,7 +149,7 @@ git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
 ### 3. Ensure the S3 bucket exists
 
 ```bash
-aws s3api create-bucket --bucket <your-bucket-name> --region us-east-1
+aws s3 create-bucket --bucket <your-bucket-name> --region us-east-1
 ```
 
 ### 4. Create a Jenkins Pipeline job
