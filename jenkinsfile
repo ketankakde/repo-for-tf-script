@@ -1,36 +1,59 @@
 pipeline {
     agent any
 
+    environment {
+        TF_IN_AUTOMATION = "true"
+    }
+
     stages {
-        stage('Pull') {
+
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ketankakde/repo-for-tf-script.git'
+                // Fix: update this URL to your actual GitHub repo before pushing
+                git branch: 'main', url: 'https://github.com/ketankakde/eks-terraform-jenkins.git'
             }
         }
 
-        stage('Plan') {
+        stage('Terraform Init') {
             steps {
-                sh '''
-                terraform init
-                terraform plan
-                '''
+                sh 'terraform init -reconfigure'
             }
-         }  
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan -out=tfplan'
+            }
+        }
 
         stage('Approve') {
             steps {
-                input message: 'ALL GOOD?' , ok: 'Approve'
-             }
-         }
-        stage('Apply') {
+                input message: 'Review the plan above. Proceed with Apply?', ok: 'Approve'
+            }
+        }
+
+        stage('Terraform Apply') {
             steps {
-                sh 'terraform apply -auto-approve'
-                    }
-            }  
+                sh 'terraform apply -auto-approve tfplan'
+            }
+        }
+
         stage('Deploy') {
             steps {
-                    echo "Deploy Success!!!"
-                  }
+                echo "EKS Cluster deployed successfully!"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully."
+        }
+        failure {
+            echo "Pipeline failed."
+        }
+        aborted {
+            echo "Pipeline was aborted by the user."
         }
     }
 }
